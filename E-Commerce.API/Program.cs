@@ -1,9 +1,13 @@
 
+using Domain.Contracts;
+using Microsoft.EntityFrameworkCore;
+using Presistences.Data;
+
 namespace E_Commerce.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -11,12 +15,22 @@ namespace E_Commerce.API
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddScoped<IDbInititlazer, DbInititlazer>();
+
+            builder.Services.AddDbContext<StoreDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(); 
+            builder.Services.AddSwaggerGen();
             #endregion
 
             var app = builder.Build();
+
+            await InitilaizeDbAsync(app);
 
             #region Configure Kestrel MiddelWares
             // Configure the HTTP request pipeline.
@@ -32,6 +46,16 @@ namespace E_Commerce.API
             #endregion
 
             app.Run();
+
+            async Task InitilaizeDbAsync(WebApplication app)
+            {
+                // Create Object From Type That Implements IDbInititlazer
+                using var scope = app.Services.CreateScope();
+
+                var dbInititlazer = scope.ServiceProvider.GetRequiredService<IDbInititlazer>();
+
+                await dbInititlazer.InitilaizerAsync();
+            }
         }
     }
 }
