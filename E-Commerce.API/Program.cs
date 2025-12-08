@@ -2,6 +2,7 @@
 using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Presistences.Data;
+using Presistences.Repositories;
 
 namespace E_Commerce.API
 {
@@ -17,6 +18,7 @@ namespace E_Commerce.API
             builder.Services.AddControllers();
 
             builder.Services.AddScoped<IDbInititlazer, DbInititlazer>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddDbContext<StoreDbContext>(options =>
             {
