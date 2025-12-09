@@ -19,6 +19,7 @@ namespace E_Commerce.API
 
             builder.Services.AddScoped<IDbInititlazer, DbInititlazer>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             //builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile()));
             builder.Services.AddAutoMapper(o => { }, typeof(AssemblyReferance).Assembly);
 
