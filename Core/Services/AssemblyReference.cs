@@ -1,6 +1,6 @@
 ﻿namespace Services
 {
-    public class AssemblyReferance
+    public class AssemblyReference
     {
     }
 }

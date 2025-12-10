@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Presistences.Data;
 using Presistences.Repositories;
 using Services;
+using Services.Abstraction.Contracts;
+using Services.Implementations;
 
 namespace E_Commerce.API
 {
@@ -19,9 +21,10 @@ namespace E_Commerce.API
 
             builder.Services.AddScoped<IDbInititlazer, DbInititlazer>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IServiceManager, ServiceManager>();
 
             //builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile()));
-            builder.Services.AddAutoMapper(o => { }, typeof(AssemblyReferance).Assembly);
+            builder.Services.AddAutoMapper(o => { }, typeof(AssemblyReference).Assembly);
 
             builder.Services.AddDbContext<StoreDbContext>(options =>
             {
@@ -46,6 +49,7 @@ namespace E_Commerce.API
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseAuthorization();
             app.MapControllers();
             #endregion
