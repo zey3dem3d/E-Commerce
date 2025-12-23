@@ -1,6 +1,7 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Presistences.Data;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace Presistences.Repositories
         public async Task<IEnumerable<TEntity>> GetAllAsync(bool asNoTracking = false)
                 => asNoTracking ? await _dbContext.Set<TEntity>().ToListAsync() :
                         await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync();
+
         public async Task<TEntity?> GetByIdAsync(TKey id) => await _dbContext.Set<TEntity>().FindAsync(id);
 
         public async Task AddAsync(TEntity entity) => await _dbContext.Set<TEntity>().AddAsync(entity);
@@ -29,5 +31,15 @@ namespace Presistences.Repositories
         public void Update(TEntity entity) => _dbContext.Set<TEntity>().Update(entity);
 
         public void Delete(TEntity entity) => _dbContext?.Set<TEntity>().Remove(entity);
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TEntity, TKey> specifications)
+            => await ApplySpecifications(specifications).ToListAsync();
+
+        public async Task<TEntity?> GetByIdAsync(ISpecifications<TEntity, TKey> specifications)
+            => await ApplySpecifications(specifications).FirstOrDefaultAsync();
+
+        private IQueryable<TEntity> ApplySpecifications(ISpecifications<TEntity, TKey> specifications)
+            => SpecificationsEvaluator.GetQuery(_dbContext.Set<TEntity>(), specifications);
+
     }
 }
