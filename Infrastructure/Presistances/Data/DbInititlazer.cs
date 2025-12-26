@@ -71,7 +71,6 @@ namespace Presistences.Data
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

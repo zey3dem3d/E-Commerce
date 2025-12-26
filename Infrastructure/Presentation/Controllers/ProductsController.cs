@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shared.Enums;
+using Shared;
 
 namespace Presentation.Controllers
 {
@@ -17,8 +18,8 @@ namespace Presentation.Controllers
     {
         #region Get All Products
         [HttpGet] // GET: BaseUrl/api/Products
-        public async Task<ActionResult<IEnumerable<ProductResultDto>>> GetAllProducts(ProductSortingOptions sort, int? typeId, int? brandId)
-            => Ok(await _serviceManager.ProductService.GetAllProductsAsync(sort, typeId, brandId));
+        public async Task<ActionResult<PaginatedResult<ProductResultDto>>> GetAllProducts([FromQuery] ProductSpecParams parameter)
+            => Ok(await _serviceManager.ProductService.GetAllProductsAsync(parameter));
         #endregion
 
         #region Get Product By Id

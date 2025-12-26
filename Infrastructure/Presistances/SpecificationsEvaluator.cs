@@ -21,11 +21,14 @@ namespace Presistences
             if (specifications.IncludeExpressions?.Count > 0)
                 query = specifications.IncludeExpressions.Aggregate(query, (CurrentQuery, IncludeExpression) => CurrentQuery.Include(IncludeExpression));
 
-            if(specifications.OrderBy is not null)
+            if (specifications.OrderBy is not null)
                 query = query.OrderBy(specifications.OrderBy);
 
-            if(specifications.OrderByDescending is not null)
+            if (specifications.OrderByDescending is not null)
                 query = query.OrderByDescending(specifications.OrderByDescending);
+
+            if (specifications.IsPaginated)
+                query = query.Skip(specifications.Skip).Take(specifications.Take);
 
             return query;
         }

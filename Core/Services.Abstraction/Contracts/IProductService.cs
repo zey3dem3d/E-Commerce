@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shared.Enums;
+using Shared;
 
 namespace Services.Abstraction.Contracts
 {
     public interface IProductService
     {
         // Get All Products
-        public Task<IEnumerable<ProductResultDto>> GetAllProductsAsync(ProductSortingOptions sort, int? typeId, int? brandId);
+        public Task<PaginatedResult<ProductResultDto>> GetAllProductsAsync(ProductSpecParams parameters);
         // Get Product By Id
         public Task<ProductResultDto> GetProductByIdAsync(int id);
         // Get All Brands

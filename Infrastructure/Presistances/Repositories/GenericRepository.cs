@@ -38,6 +38,10 @@ namespace Presistences.Repositories
         public async Task<TEntity?> GetByIdAsync(ISpecifications<TEntity, TKey> specifications)
             => await ApplySpecifications(specifications).FirstOrDefaultAsync();
 
+        public async Task<int> CountAsync(ISpecifications<TEntity, TKey> specifications)
+            => await ApplySpecifications(specifications).CountAsync();
+
+
         private IQueryable<TEntity> ApplySpecifications(ISpecifications<TEntity, TKey> specifications)
             => SpecificationsEvaluator.GetQuery(_dbContext.Set<TEntity>(), specifications);
 

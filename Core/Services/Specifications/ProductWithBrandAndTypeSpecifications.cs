@@ -1,11 +1,12 @@
 ﻿using Domain.Entities.ProductModule;
+using Shared;
+using Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using Shared.Enums;
 
 namespace Services.Specifications
 {
@@ -13,14 +14,14 @@ namespace Services.Specifications
     {
         // Get All Products
         // query = _dbContext.Set<Product>().Include(P => P.ProductBrand).Include(P => P.ProductType)
-        public ProductWithBrandAndTypeSpecifications(ProductSortingOptions sort, int? typeId, int? brandId) :
-            base(product => 
-            (!typeId.HasValue || product.TypeId == typeId.Value) && (!brandId.HasValue || product.BrandId == brandId.Value))
+        public ProductWithBrandAndTypeSpecifications(ProductSpecParams parameters) :
+            base(product =>
+            (!parameters.TypeId.HasValue || product.TypeId == parameters.TypeId.Value) && (!parameters.BrandId.HasValue || product.BrandId == parameters.BrandId.Value))
         {
             AddIncludes(P => P.ProductBrand);
             AddIncludes(P => P.ProductType);
 
-            switch (sort)
+            switch (parameters.Sort)
             {
                 case ProductSortingOptions.PriceAsc:
                     SetOrderBy(P => P.Price);
@@ -40,6 +41,8 @@ namespace Services.Specifications
                 default:
                     break;
             }
+
+            ApplyPagination(parameters.PageIndex, parameters.PageSize);
         }
 
         public ProductWithBrandAndTypeSpecifications(int id) : base(P => P.Id == id)

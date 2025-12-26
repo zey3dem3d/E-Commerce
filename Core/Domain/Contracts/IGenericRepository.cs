@@ -13,6 +13,7 @@ namespace Domain.Contracts
         Task<IEnumerable<TEntity>> GetAllAsync(bool asNoTracking = false);
         // Get All with Specifications
         Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TEntity, TKey> specifications);
+        Task<int> CountAsync(ISpecifications<TEntity, TKey> specifications);
         // Get By Id
         Task<TEntity?> GetByIdAsync(TKey id);
         // Get By Id with Specifications
