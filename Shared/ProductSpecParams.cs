@@ -22,5 +22,7 @@ namespace Shared
             get => pageSize;
             set => pageSize = value > MaxPageSize ? DefaultPageSize : value;
         }
+
+        public string? Search { get; set; }
     }
 }
