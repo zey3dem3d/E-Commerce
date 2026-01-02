@@ -23,7 +23,7 @@ namespace Presentation.Controllers
         #endregion
 
         #region Get Product By Id
-        [HttpGet("{id:int}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ProductResultDto>> GetProductById(int id)
             => await _serviceManager.ProductService.GetProductByIdAsync(id);
         #endregion

@@ -1,4 +1,7 @@
 using Domain.Contracts;
+using E_Commerce.API.Factories;
+using E_Commerce.API.MiddleWares;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Presistences.Data;
 using Presistences.Repositories;
@@ -31,6 +34,11 @@ namespace E_Commerce.API
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = ApiResponseFactory.CustomValidationErrorResponse;
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -42,6 +50,9 @@ namespace E_Commerce.API
 
             #region Configure Kestrel MiddelWares
             // Configure the HTTP request pipeline.
+
+            app.UseMiddleware<GlobalErrorHandelingMiddleware>();
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
