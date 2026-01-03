@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Shared.Enums;
 using Shared;
+using Microsoft.AspNetCore.Http;
+using Shared.Error_Models;
 
 namespace Presentation.Controllers
 {
@@ -23,6 +25,10 @@ namespace Presentation.Controllers
         #endregion
 
         #region Get Product By Id
+        [ProducesResponseType(typeof(ProductResultDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductResultDto>> GetProductById(int id)
             => await _serviceManager.ProductService.GetProductByIdAsync(id);
